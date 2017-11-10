@@ -11,14 +11,14 @@
 </head>
 
 <body>
-              {% for i in length %}
+              {% for i in batches %}
                   <div class="dropdown">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{ batches.i }} <span class="caret"></span>
+                            {{ i.batch }} <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li> <a href="{% url 'campus_admin:result_base' pk=batches.i pk4=CS%}">CS </a></li>
-                            <li> <a href="{% url 'campus_admin:result_base' pk=batches.i pk4=IT%}">IT </a></li>
+                            <li> <a href="{% url 'campus_admin:result_base' pk=i.batch pk4='CS'%}">CS </a></li>
+                            <li> <a href="{% url 'campus_admin:result_base' pk=i.batch pk4='IT'%}">IT </a></li>
                         </ul>
                   </div>
 

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 
 <html>
@@ -9,19 +11,19 @@
 </head>
 
 <body>
+              {% for i in batches %}
+                  <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ i.batch }} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li> <a href="{% url 'campus_admin:fee_receipt_base' pk=i.batch pk4='CS'%}">CS </a></li>
+                            <li> <a href="{% url 'campus_admin:fee_receipt_base' pk=i.batch pk4='IT'%}">IT </a></li>
+                        </ul>
+                  </div>
 
-              <div class="dropdown">
-		            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-		            	{{ year }} <span class="caret"></span>
-		            </button>
-		            <ul class="dropdown-menu">
-			            <li> <a href="{% url 'campus_admin:CS_fee_receipt' pk=year %}">CS </a></li>
-                        <li> <a href="{% url 'campus_admin:IT' pk=year %}">IT </a></li>
-		            </ul>
-              </div>
-
-
-
+                  <br> <br>
+              {% endfor %}
 
 </body>
 
