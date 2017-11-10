@@ -1,0 +1,15 @@
+{% load mathfilters %}
+
+{% if value == 0 %}
+    <p> <strong> Nothing to Show </strong> </p>
+    {% else %}
+        {% with ''|center:value as range %}
+        {% for _ in  range  %}
+           {% with 0|add:forloop.counter  as pk2 %}
+             <a href="{% url 'campus_admin:result_view' pk=pk pk1=pk1 pk2=pk2 pk4=pk4 %}"> Semester {{ pk2 }} Grade Card</a> <br>
+           {% endwith %}
+        {% endfor %}
+        {% endwith %}
+{% endif %}
+
+
