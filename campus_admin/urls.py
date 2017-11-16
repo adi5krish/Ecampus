@@ -8,6 +8,10 @@ urlpatterns=[
 
     url(r'^$',views.index, name='index'),
 
+    url(r'^result/(?P<pk4>.+)/(?P<pk1>.+)/(?P<pk>\d+)/(?P<pk2>\d+)/(?P<pk3>.+)/success/$', views.success_result,
+        name='success_result'),
+    url(r'^fee_receipt/(?P<pk4>.+)/(?P<pk1>.+)/(?P<pk>\d+)/(?P<pk2>\d+)/(?P<pk3>.+)/success/$', views.success_fee_receipt,
+        name='success_fee_receipt'),
 
     url(r'^result/(?P<pk4>.+)/(?P<pk1>.+)/(?P<pk>\d+)/(?P<pk2>\d+)/course_list/$',views.course_list,name='course_list'),
     url(r'^result/(?P<pk4>.+)/(?P<pk1>.+)/(?P<pk>\d+)/(?P<pk2>\d+)/$',views.result_view,name='result_view'),
@@ -19,9 +23,12 @@ urlpatterns=[
     url(r'^result/(?P<pk4>.+)/(?P<pk1>.+)/(?P<pk>\d+)/(?P<pk2>\d+)/(?P<pk3>.+)/result_add/$',views.result_add,name='result_add'),
     url(r'^result/(?P<pk4>.+)/(?P<pk1>.+)/(?P<pk>\d+)/$', views.sem_view_result, name='sem_view_result'),
     url(r'^result/(?P<pk4>.+)/(?P<pk>.+)/$',views.result_base,name='result_base'),
-    url(r'^result/$', views.result, name='result'),
-    url(r'^success/$',views.success,name='success'),
+    url(r'^result/add_course/$',views.add_course,name='add_course'),
+    url(r'^add_faculty/$', views.add_faculty, name='add_faculty'),
 
+    # url(r'^result/(?P<pk5>.+)/add_semester/$',views.add_semester,name='add_semester'),
+    url(r'^result/$', views.result, name='result'),
+    url(r'^registration/',views.registration,name='registration'),
 
 
     url(r'^fee_receipt/(?P<pk4>.+)/(?P<pk1>.+)/(?P<pk>\d+)/(?P<pk2>\d+)/$', views.fee_receipt_view,

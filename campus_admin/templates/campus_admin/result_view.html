@@ -1,36 +1,46 @@
+{% extends 'campus_admin/base.html' %}
+
 {% load mathfilters %}
 
-{% block head %}
-     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-{% endblock %}
+{% block body %}
 
+    <style>
+        .temp{
+            margin-top:75px;
+            padding:100px;
 
-{% block content %}
+        }
+        th{
+            border-top:2px solid black;
+            border-bottom: 2px solid black;
+            color: #447e9b;
+        }
+        td{
+             border-bottom: 2px solid black;
+        }
+    </style>
 
+<h1 style="padding-left: 550px;"> <strong> Grade Sheet </strong>  </h1>
 
-<table border="1" colspan="2" width="100%">
+<table border="1" align="center" colspan="2" width="80%" class="temp">
    <tr>
-         <th width="20%" align="center">SemesterNo</th>
+         <th width="20%"  style="text-align:center;"> SemesterNo</th>
          {% for c in course %}
-            <th width="10%" align="center">{{ c.courseNo.courseNo }}</th>
+            <th width="10%" style="text-align:center;"> {{ c.courseNo.courseNo }}</th>
          {% endfor %}
-         <th width="15%" text-align="center">SPI</th>
-         <th width="15%" text-align="center">CPI</th>
+         <th width="15%"  style="text-align:center;">  SPI </th>
+         <th width="15%"  style="text-align:center;">  CPI </th>
 
 
    </tr>
 
    <tr>
-       <td width="20%" align="center">{{ pk2 }}</td>
-       <form >
+       <td width="20%"  style="text-align:center;">{{ pk2 }}</td>
            {% for c in course %}
-               <th width="10%" align="center"> {{ c.grade }} </th>
+               <th width="10%" style="text-align:center;"> {{ c.grade }} </th>
            {% endfor %}
-         <th width="15%" text-align="center">{{ SPI }}</th>
-         <th width="15%" text-align="center">{{ CPI }}</th>
-       </form>
+         <th width="15%" style="text-align:center;"> {{ SPI }}</th>
+         <th width="15%" style="text-align:center;"> {{ CPI }}</th>
 
    </tr>
 

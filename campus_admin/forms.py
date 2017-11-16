@@ -1,5 +1,49 @@
 from django import forms
-from .models import Registers,FeeReceipt,Result
+from .models import Registers,FeeReceipt,Courses,Faculty
+
+
+
+class CoursesForm(forms.ModelForm):
+
+
+    class Meta:
+        model = Courses
+        fields = ['courseNo','courseName','credits','offered_In','elective','offered_to','assigned_to']
+
+    def clean_courseNo(self):
+        courseNo = self.cleaned_data['courseNo']
+        length = len(courseNo)
+        if length == 5:
+            string_part = courseNo[0:2]
+            integer_part = courseNo[2:5]
+            if string_part == 'CS' or  string_part == 'IT' or  string_part =='HM'  or  string_part =='SC':
+                for i in range(0,len(integer_part)):
+                    if ord(integer_part[i])<48 or ord(integer_part[i])>57:
+                        raise forms.ValidationError("Invalid CourseNo")
+            else:
+                raise forms.ValidationError("Invalid CourseNo")
+
+            if Courses.objects.filter(courseNo = courseNo):
+                raise forms.ValidationError("CourseNo already exists")
+
+        else:
+            raise forms.ValidationError("Invalid CourseNo")
+        return courseNo
+
+
+    def clean_courseName(self):
+        courseName = self.cleaned_data['courseName']
+        if Courses.objects.filter(courseName=courseName):
+            raise forms.ValidationError("CourseName already exists")
+
+        return courseName
+
+    def clean_assigned_to(self):
+        facultyName = self.cleaned_data['assigned_to']
+        if Courses.objects.filter(assigned_to=facultyName):
+            raise forms.ValidationError(facultyName.facultyName +" is already assigned one course ")
+
+        return facultyName
 
 
 class RegistersForm(forms.ModelForm):
@@ -28,7 +72,28 @@ class FeeReceiptForm(forms.ModelForm):
         if FeeReceipt.objects.filter(receiptId = receiptId):
             raise forms.ValidationError("ReceiptId already exists")
 
-'''
+        return receiptId
+
+
+class FacultyForm(forms.ModelForm):
+
+    class Meta:
+        model = Faculty
+        fields = ['facultyId','facultyName']
+
+    def clean_facultyId(self):
+        facultyId = self.cleaned_data['facultyId']
+        if Faculty.objects.filter(facultyId = facultyId):
+            raise forms.ValidationError("FacultyId already exists")
+        return facultyId
+
+    def clean_facultyName(self):
+        facultyName = self.cleaned_data['facultyName']
+        if Faculty.objects.filter(facultyName = facultyName):
+            raise forms.ValidationError("FacultyName already exists")
+        return facultyName
+
+''' 
 class ResultForm(forms.ModelForm):
     class Meta:
         model = Result

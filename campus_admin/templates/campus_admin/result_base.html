@@ -1,30 +1,40 @@
+{% extends 'campus_admin/base.html' %}
 
 
-<!DOCTYPE html>
+{% block body %}
 
-<html>
+    <style>
+        .baseStyle{
+                margin-top: 20px;
+                margin-left: 500px;
+        }
+        #outerPanel{
+            margin-top: 30px;
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+    </style>
 
-<head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
+        <div class="panel panel-default" id="outerPanel">
+            <div class="panel-body">
+                <div class="baseStyle">
 
-<body>
-              {% for i in batches %}
-                  <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                            {{ i.batch }} <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li> <a href="{% url 'campus_admin:result_base' pk=i.batch pk4='CS'%}">CS </a></li>
-                            <li> <a href="{% url 'campus_admin:result_base' pk=i.batch pk4='IT'%}">IT </a></li>
-                        </ul>
-                  </div>
+                    {% for i in batches %}
+                          <div class="dropdown">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    {{ i.batch }} <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li> <a href="{% url 'campus_admin:result_base' pk=i.batch pk4='CS'%}">CS </a></li>
+                                    <li> <a href="{% url 'campus_admin:result_base' pk=i.batch pk4='IT'%}">IT </a></li>
+                                </ul>
+                          </div>
+                      <br>
+                    {% endfor %}
 
-                  <br> <br>
-              {% endfor %}
+                </div>
+            </div>
+        </div>
 
-</body>
+{% endblock %}
 
-</html>

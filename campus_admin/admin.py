@@ -6,8 +6,8 @@ from .models import (
     Courses,
     Result,
     Registers,
-    Offers,
     FeeReceipt,
+    Faculty,
 
 )
 
@@ -16,6 +16,6 @@ admin.site.register(Semester)
 admin.site.register(Courses)
 admin.site.register(Result)
 admin.site.register(Registers)
-admin.site.register(Offers)
 admin.site.register(FeeReceipt)
+admin.site.register(Faculty)
 

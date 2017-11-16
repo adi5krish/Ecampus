@@ -1,13 +1,18 @@
 from django.shortcuts import render,get_object_or_404,redirect
 from .models import Student,Registers,FeeReceipt,Result
-from .forms import RegistersForm,FeeReceiptForm
+from .forms import RegistersForm,FeeReceiptForm,CoursesForm,FacultyForm
 from django.http import HttpResponse
 import math
 from django.db.models import Max,Min
 
+
 def index(request):
     template = 'campus_admin/homepage.html'
     return render(request, template)
+
+
+def registration(request):
+    return  HttpResponse('<p> Nothing to Show </p>')
 
 
 def result(request):
@@ -81,6 +86,7 @@ def sem_view_fee(request,pk,pk1,pk4):
     semNo = temp.order_by('semesterNo').values('semesterNo').distinct()
     max = semNo.aggregate(Max('semesterNo'))
     value = max['semesterNo__max']
+
     #  max = int(max) - 1
     #  print(value)
     return render(request, 'campus_admin/semester_View_fee.html',
@@ -116,6 +122,33 @@ def result_add(request,pk,pk1,pk2,pk3,pk4):
 '''
 
 
+def add_faculty(request):
+
+    if request.method == "POST":
+        form = FacultyForm(request.POST)
+
+        if form.is_valid():
+            temp = form.save()
+            return redirect('campus_admin:success')
+    else:
+        form = FacultyForm
+
+    return render(request,'campus_admin/faculty_add.html',{'form':form})
+
+
+def add_course(request):
+
+    if request.method == "POST":
+        form = CoursesForm(request.POST or None)
+        # print(form.assigned_to)
+        if form.is_valid():
+            temp=form.save()
+            return redirect('campus_admin:success')
+    else:
+        form = CoursesForm
+    return render(request,'campus_admin/courses_add.html',{'form':form})
+
+
 def result_add(request,pk,pk1,pk2,pk3,pk4):
 
     student = get_object_or_404(Registers,studentId=pk,courseNo=pk3,semesterNo=pk2)
@@ -126,18 +159,26 @@ def result_add(request,pk,pk1,pk2,pk3,pk4):
         grade = request.POST.get('grade')
         Registers.objects.filter(studentId=pk, courseNo=pk3).update(grade=grade)
         # temp.save()
-        return redirect('campus_admin:success')
+        return redirect('campus_admin:success_result',pk=pk,pk4=pk4,pk1=pk1,pk2=pk2,pk3=pk3)
 
     return render(request, 'campus_admin/result_add.html', {'form': form})
 
 
-def success(request):
-    return  HttpResponse('<p> Suucessfully done </p> ')
+def success_result(request, pk4, pk1, pk, pk2, pk3):
+
+    args = {'pk4':pk4 ,'pk1':pk1}
+    return render(request, 'campus_admin/successful_result_update.html', args)
+
+
+def success_fee_receipt(request, pk4, pk1, pk, pk2, pk3):
+
+    args = {'pk4': pk4,'pk1':pk1}
+    return render(request, 'campus_admin/successful_fee_receipt_update.html', args)
 
 
 def fee_receipt_add(request,pk,pk1,pk2,pk4):
 
-    student = get_object_or_404(FeeReceipt, studentId=pk ,semesterNo=pk2,acadYear__acadYear=pk1)
+    student = get_object_or_404(FeeReceipt, studentId=pk ,semesterNo=pk2)
     form = FeeReceiptForm(request.POST or None, instance=student)
 
     if form.is_valid():
@@ -145,10 +186,11 @@ def fee_receipt_add(request,pk,pk1,pk2,pk4):
         data = request.POST.get('receiptId')
         data1 = request.POST.get('status')
 
-        FeeReceipt.objects.filter(studentId=pk,acadYear__acadYear=pk1,semesterNo=pk2).update(receiptId=data)
-        FeeReceipt.objects.filter(studentId=pk,acadYear__acadYear=pk1,semesterNo=pk2).update(status=data1)
-        return redirect('campus_admin:success')
+        FeeReceipt.objects.filter(studentId=pk,semesterNo=pk2).update(receiptId=data)
+        FeeReceipt.objects.filter(studentId=pk,semesterNo=pk2).update(status=data1)
+        return redirect('campus_admin:success_fee_receipt', pk=pk, pk4=pk4, pk1=pk1, pk2=pk2, pk3=pk3)
 
+    #print(form.errors)
     return render(request,'campus_admin/fee_receipt_add.html',{'form':form})
 
 '''
@@ -189,7 +231,7 @@ def final_fee_receipt_view(request,pk,pk1,pk4):
 
 def result_view(request,pk,pk1,pk2,pk4):
 
-    temporary = Result.objects.get(studentId=pk, acadYear__acadYear=pk1, semesterNo=pk2)
+    temporary = Result.objects.get(studentId=pk, semesterNo=pk2)
     course = Registers.objects.filter(studentId=pk, semesterNo=pk2)
     total = 0
     CPI = 0.0
@@ -200,7 +242,7 @@ def result_view(request,pk,pk1,pk2,pk4):
             total = total + c.courseNo.credits
         SPI = (math.ceil(calculate_points(pk,pk2,total)*100)/100)
         # print(SPI)
-        temporary = Result.objects.get(studentId=pk,acadYear__acadYear=pk1,semesterNo=pk2)
+        temporary = Result.objects.get(studentId=pk,semesterNo=pk2)
         temporary.SPI = SPI
         temporary.save()
         # print(SPI,pk2)
@@ -215,7 +257,7 @@ def result_view(request,pk,pk1,pk2,pk4):
         CPI = SPI
     else:
         while temp > 0 :
-            temporary = Result.objects.get(studentId=pk, acadYear__acadYear=pk1, semesterNo=temp)
+            temporary = Result.objects.get(studentId=pk, semesterNo=temp)
             CPI = SPI+temporary.SPI
           #  print(CPI)
             temp = temp - 1
@@ -255,16 +297,9 @@ def calculate_points(pk,pk2,total):
 
 def fee_receipt_view(request,pk,pk1,pk2,pk4):
 
-    fee = FeeReceipt.objects.get(studentId=pk,acadYear__acadYear=pk1,semesterNo=pk2)
+    fee = FeeReceipt.objects.get(studentId=pk,semesterNo=pk2)
     iterate = int(pk2) - 1
     return render(request, 'campus_admin/fee_receipt_view.html', {'fee': fee, 'pk1':pk1, 'pk2':pk2,'pk':pk,'pk4':pk4,'iterate':iterate})
 
 
 
-
-'''
-    grade1 = Registers.objects.filter(courseNo = student.courseNo.courseNo)[0]
-    grade2 = Registers.objects.filter(courseNo=student.courseNo.courseNo)[1]
-    grade3 = Registers.objects.filter(courseNo=student.courseNo.courseNo)[2]
-    grade4 = Registers.objects.filter(courseNo=student.courseNo.courseNo)[3]
-    grade5 = Registers.objects.filter(courseNo=student.courseNo.courseNo)[4]'''
