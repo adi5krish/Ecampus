@@ -136,6 +136,10 @@ def add_faculty(request):
     return render(request,'campus_admin/faculty_add.html',{'form':form})
 
 
+def success(request):
+    return render(request,'campus_admin/success.html')
+
+
 def add_course(request):
 
     if request.method == "POST":
@@ -188,7 +192,7 @@ def fee_receipt_add(request,pk,pk1,pk2,pk4):
 
         FeeReceipt.objects.filter(studentId=pk,semesterNo=pk2).update(receiptId=data)
         FeeReceipt.objects.filter(studentId=pk,semesterNo=pk2).update(status=data1)
-        return redirect('campus_admin:success_fee_receipt', pk=pk, pk4=pk4, pk1=pk1, pk2=pk2, pk3=pk3)
+        return redirect('campus_admin:success_fee_receipt', pk=pk, pk4=pk4, pk1=pk1, pk2=pk2)
 
     #print(form.errors)
     return render(request,'campus_admin/fee_receipt_add.html',{'form':form})

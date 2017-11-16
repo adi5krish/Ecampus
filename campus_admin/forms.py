@@ -26,16 +26,22 @@ class CoursesForm(forms.ModelForm):
             if Courses.objects.filter(courseNo = courseNo):
                 raise forms.ValidationError("CourseNo already exists")
 
+        elif length == 0:
+            raise forms.ValidationError("Please Enter a valid courseNo")
+
         else:
             raise forms.ValidationError("Invalid CourseNo")
         return courseNo
 
 
+
     def clean_courseName(self):
         courseName = self.cleaned_data['courseName']
-        if Courses.objects.filter(courseName=courseName):
-            raise forms.ValidationError("CourseName already exists")
-
+        if courseName.__len__() != 0:
+            if Courses.objects.filter(courseName=courseName):
+                raise forms.ValidationError("CourseName already exists")
+        else:
+            raise forms.ValidationError("Please Enter a valid CourseName")
         return courseName
 
     def clean_assigned_to(self):
@@ -69,9 +75,11 @@ class FeeReceiptForm(forms.ModelForm):
 
     def clean_receiptId(self):
         receiptId = self.cleaned_data['receiptId']
-        if FeeReceipt.objects.filter(receiptId = receiptId):
-            raise forms.ValidationError("ReceiptId already exists")
-
+        if receiptId.__len__() != 0:
+            if FeeReceipt.objects.filter(receiptId = receiptId):
+                raise forms.ValidationError("ReceiptId already exists")
+        else:
+            raise forms.ValidationError("Please Enter a valid ReceiptId")
         return receiptId
 
 
@@ -83,14 +91,20 @@ class FacultyForm(forms.ModelForm):
 
     def clean_facultyId(self):
         facultyId = self.cleaned_data['facultyId']
-        if Faculty.objects.filter(facultyId = facultyId):
-            raise forms.ValidationError("FacultyId already exists")
+        if facultyId != 0:
+            if Faculty.objects.filter(facultyId = facultyId) and  facultyId != 0:
+                raise forms.ValidationError("FacultyId already exists")
+        else:
+            raise forms.ValidationError("Enter Valid FacultyId")
         return facultyId
 
     def clean_facultyName(self):
         facultyName = self.cleaned_data['facultyName']
-        if Faculty.objects.filter(facultyName = facultyName):
-            raise forms.ValidationError("FacultyName already exists")
+        if facultyName != None:
+            if Faculty.objects.filter(facultyName = facultyName):
+                raise forms.ValidationError("FacultyName already exists")
+        else:
+            raise forms.ValidationError("Enter Valid FacultyName")
         return facultyName
 
 ''' 
